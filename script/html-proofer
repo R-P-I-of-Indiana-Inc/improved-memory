@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "html-proofer"
+
+url_ignores = [
+  "https://okdistribute.xyz/post/okf-de",
+  "https://www.drupal.org/community-initiatives/drupal-core/usability",
+  "https://scripts.sil.org/ofl",
+  "https://the-orbit.net/almostdiamonds/2014/04/10/so-youve-got-yourself-a-policy-now-what/",
+  "https://pages.18f.gov/open-source-guide/making-readmes-readable/",
+  %r{^https?://twitter\.com/},
+  %r{^https?://(www\.)?kickstarter\.com/},
+  %r{^https://guides\.github\.com/},
+  %r{^https://help\.github\.com/},
+  %r{^https://github\.com/},
+  %r{^https?://(www\.)?reddit\.com},
+]
+
+HTMLProofer::Runner.new(
+  ["_site"],
+  parallel: { in_threads: 4 },
+  type: :directory,
+  ignore_urls: url_ignores,
+  check_html: true,
+  check_opengraph: true,
+  favicon: true,
+  assume_extension: true,
+  allow_missing_href: true,
+  enforce_https: false,
+  only_4xx: true,
+  ignore_status_codes: [429]
+).run
